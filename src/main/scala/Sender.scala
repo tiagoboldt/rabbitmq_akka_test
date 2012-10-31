@@ -4,7 +4,7 @@ import com.rabbitmq.client._
 
 case class Message(s:String)
 
-class Sender(ID: Int, queue: String) extends Actor {
+class Sender(ID: Int, start: Int, end: Int, queue: String) extends Actor {
 
   protected var factory: ConnectionFactory  = null
   protected var connection: Connection = null
@@ -16,6 +16,12 @@ class Sender(ID: Int, queue: String) extends Actor {
     connection = factory.newConnection
     channel = connection.createChannel
     channel.queueDeclare(queue, false, false, false, null)
+
+    for(i <- start to end) {
+      val m = i.toString
+      channel.basicPublish("", queue, null, m.getBytes)
+      System.out.println(" [%s] Sent '%s'".format(ID, m))
+    }
   }
 
   protected def receive = {

@@ -35,6 +35,6 @@ class Consumer(ID: Int, queue: String) extends Actor{
 
   protected def receive = {
     case Message(s) =>
-      println(" [%s] Got %s".format(ID, s))
+      println(" \t\t\t\t[%s] Got %s".format(ID, s))
   }
 }
