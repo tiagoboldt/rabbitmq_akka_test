@@ -7,13 +7,13 @@ class Consumer(ID: Int, queue: String) extends Actor{
   protected var connection: Connection = null
   protected var channel: Channel = null
 
-  object GetMessage
+  object GetMessages
 
   override def preStart() {
 
     context.actorOf(Props(new Actor {
       protected def receive = {
-        case GetMessage =>
+        case GetMessages =>
           factory = new ConnectionFactory()
           factory.setHost("localhost")
           connection = factory.newConnection()
@@ -28,13 +28,12 @@ class Consumer(ID: Int, queue: String) extends Actor{
             val m = Message(new String(delivery.getBody))
             sender ! m
           }
-
       }
-    })) ! GetMessage
+    })) ! GetMessages
   }
 
   protected def receive = {
     case Message(s) =>
-      println(" \t\t\t\t[%s] Got %s".format(ID, s))
+      println(" [%s] Got %s".format(ID, s))
   }
 }

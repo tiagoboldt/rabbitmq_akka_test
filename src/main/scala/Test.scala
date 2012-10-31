@@ -2,7 +2,7 @@ import akka.actor._
 
 object Test extends App {
   val QUEUE = "cenas"
-  val ConsumerCount = 8
+  val ConsumerCount = 16
   val SenderCount = 4
   val MessageCount = 2000000
 
@@ -21,7 +21,9 @@ object Test extends App {
     senders ++= Set(system.actorOf(Props(new Sender(i, start, end, QUEUE)), name = "sender%s".format(i)))
   }
 
-//
+  senders.foreach({ _ ! Start})
+
+    //
 //  for(i <- 1 to 2000000) {
 //    senders(i%SenderCount) ! Message(i.toString)
 //    Thread.sleep(1)
@@ -31,5 +33,5 @@ object Test extends App {
 //  sender ! PoisonPill
 //  system.shutdown()
 
-  println("Finished")
+  println("working!")
 }
