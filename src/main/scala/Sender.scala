@@ -4,7 +4,7 @@ import com.rabbitmq.client._
 
 case class Message(s:String)
 
-class Sender(queue: String) extends Actor {
+class Sender(ID: Int, queue: String) extends Actor {
 
   protected var factory: ConnectionFactory  = null
   protected var connection: Connection = null
@@ -21,7 +21,7 @@ class Sender(queue: String) extends Actor {
   protected def receive = {
     case Message(m) =>
       channel.basicPublish("", queue, null, m.getBytes)
-      System.out.println(" [x] Sent '%s'".format(m))
+      System.out.println(" [%s] Sent '%s'".format(ID, m))
   }
 
   override def postStop(){

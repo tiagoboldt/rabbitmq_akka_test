@@ -1,13 +1,11 @@
 import akka.actor._
 
 object Test extends App {
-  println("cenas")
-
   val QUEUE = "cenas"
   val ConsumerCount = 8
   val SenderCount = 8
 
-  var consumers = Set[ActorRef]()
+  var consumers = List[ActorRef]()
   var senders = List[ActorRef]()
 
   val system = ActorSystem("MySystem")
@@ -16,7 +14,7 @@ object Test extends App {
     consumers ++= Set(system.actorOf(Props(new Consumer(i, QUEUE)), name = "consumer%s".format(i)))
   }
   for (i<-1 to SenderCount){
-    senders ++= Set(system.actorOf(Props(new Sender(QUEUE)), name = "sender%s".format(i)))
+    senders ++= Set(system.actorOf(Props(new Sender(i, QUEUE)), name = "sender%s".format(i)))
   }
 
   Thread.sleep(1000)
