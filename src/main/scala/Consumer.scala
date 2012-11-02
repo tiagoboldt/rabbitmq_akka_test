@@ -1,25 +1,14 @@
 import akka.actor.{Props, Actor}
-import com.rabbitmq.client.{QueueingConsumer, Channel, Connection, ConnectionFactory}
+import com.rabbitmq.client.QueueingConsumer
 
-class Consumer(ID: Int, queue: String) extends Actor{
+class Consumer(ID: Int, queue: String) extends AMQPActor(ID, queue) {
 
-  protected var factory: ConnectionFactory  = null
-  protected var connection: Connection = null
-  protected var channel: Channel = null
 
-  object GetMessages
-
-  override def preStart() {
-
+  protected def startAnonymousListenner() {
+    object GetMessages
     context.actorOf(Props(new Actor {
       protected def receive = {
         case GetMessages =>
-          factory = new ConnectionFactory()
-          factory.setHost("localhost")
-          connection = factory.newConnection()
-          channel = connection.createChannel()
-          channel.queueDeclare(queue, false, false, false, null)
-
           val consumer = new QueueingConsumer(channel)
           channel.basicConsume(queue, true, consumer)
 
@@ -32,8 +21,13 @@ class Consumer(ID: Int, queue: String) extends Actor{
     })) ! GetMessages
   }
 
+  override def preStart() {
+    super.preStart()
+    startAnonymousListenner()
+  }
+
   protected def receive = {
     case Message(s) =>
-      println(" [%s] Got %s".format(ID, s))
+      println(" [%s] Got %s that is 1/2 %s".format(ID, s, s.toInt*2))
   }
 }

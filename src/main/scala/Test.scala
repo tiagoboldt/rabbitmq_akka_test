@@ -4,7 +4,7 @@ object Test extends App {
   val QUEUE = "cenas"
   val ConsumerCount = 16
   val SenderCount = 4
-  val MessageCount = 2000000
+  val MessageCount = 20000
 
   var consumers = List[ActorRef]()
   var senders = List[ActorRef]()
