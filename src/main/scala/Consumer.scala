@@ -5,10 +5,10 @@ class Consumer(ID: Int, queue: String) extends AMQPActor(ID, queue) {
 
 
   protected def startAnonymousListenner() {
-    object GetMessages
+
     context.actorOf(Props(new Actor {
       protected def receive = {
-        case GetMessages =>
+        case 'GetMessages =>
           val consumer = new QueueingConsumer(channel)
           channel.basicConsume(queue, true, consumer)
 
@@ -18,7 +18,7 @@ class Consumer(ID: Int, queue: String) extends AMQPActor(ID, queue) {
             sender ! m
           }
       }
-    })) ! GetMessages
+    })) ! 'GetMessages
   }
 
   override def preStart() {
