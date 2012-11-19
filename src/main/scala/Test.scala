@@ -2,9 +2,9 @@ import akka.actor._
 
 object Test extends App {
   val QUEUE = "cenas"
-  val ConsumerCount = 16
+  val ConsumerCount = 4
   val SenderCount = 4
-  val MessageCount = 20000
+  val MessageCount = 10000
 
   var consumers = List[ActorRef]()
   var senders = List[ActorRef]()

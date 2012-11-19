@@ -1,6 +1,10 @@
 import akka.actor.Actor
 import com.rabbitmq.client.{Channel, Connection, ConnectionFactory}
 
+case class AMQPMessage()
+case class StringMessage(s: String) extends AMQPMessage
+case class IntMessage(i: Int) extends AMQPMessage
+
 abstract class AMQPActor(ID: Int, queue: String) extends Actor {
 
   override def toString = ID.toString
